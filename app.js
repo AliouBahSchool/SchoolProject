@@ -3,6 +3,7 @@ var express = require('express');
 var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
+var SqlString = require('sqlstring');
 
 var bodyParser = require('body-parser');
 const app = express();
@@ -30,7 +31,7 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 app.get('/database', function (req, res, next) {
   var body = req.body.query
-  let sql = "SELECT Price,Description,Image FROM 'store' WHERE 'name' LIKE '"+body+"'"
+  let sql = "SELECT Price,Description,Image FROM 'store' WHERE 'name' LIKE '"+SqlString.escape(body)+"'"
   var sqlite = require('sqlite3');
   let db = new sqlite.Database('./db/Store.db')
   var data = [];
